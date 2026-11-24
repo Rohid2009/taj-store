@@ -179,6 +179,8 @@ html[data-theme=ivory] .mdl{background:rgba(29,23,52,.5)}
 .av{position:relative;width:88px;height:88px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;background:var(--b);color:#fff;font-size:34px;font-weight:800;cursor:pointer;box-shadow:0 0 0 3px var(--card),0 0 0 4px #d5bf93}.av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .avc{position:absolute;right:-2px;bottom:0;width:30px;height:30px;border-radius:50%;background:var(--card);color:var(--b);display:grid;place-items:center;border:1px solid var(--ln);box-shadow:var(--sh)}.avc .ic{width:16px;height:16px}
 .tav{width:22px;height:22px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px currentColor}
+
+html.cloud [data-a="rst"],html.cloud [data-a="rst0"],html.cloud label:has(> input[data-c="imp"]),html.cloud a[href="#/track"]{display:none!important}
 </style></head><body>
 <a class="skip" href="#main">Skip</a>
 <header class="top"><div class="tr" id="tr"></div></header>
@@ -191,7 +193,7 @@ html[data-theme=ivory] .mdl{background:rgba(29,23,52,.5)}
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],KEY="tajstore-v1",OLD="shopnova-v2",VER=5;
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const dg=s=>String(s).replace(/\D/g,""),hs=s=>{let h=5381;s="sn4$"+s;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return(h>>>0).toString(36)};
-let _n=Date.now();const NID=()=>++_n;let S;const A={};
+let _n=Date.now()*1000+Math.floor(Math.random()*1000);const NID=()=>++_n;let S;const A={};
 const Q=a=>a[S.lang]||a[0],nm=s=>{const a=String(s).split("|");return a[S.lang]||a[0]};
 const L={
 home:["Асосӣ","Главная","Home"],cats:["Категория","Категории","Categories"],srch:["Ҷустуҷӯ","Поиск","Search"],cart:["Сабад","Корзина","Cart"],favs:["Дӯстдошта","Избранное","Wishlist"],me:["Профил","Профиль","Profile"],orders:["Фармоишҳо","Заказы","Orders"],notif:["Огоҳиномаҳо","Уведомления","Notifications"],
@@ -280,7 +282,7 @@ coupons:[cp("NOVA10","pct",10,0,200,100,1),cp("SALE20","pct",20,1000,500,50,2),c
 orders:[],reviews:[],qa:[{id:1,pid:1,uid:0,nm:"Бахром",q:"Шумкунии фаъол дорад?",a:"Бале, ANC дорад.",ts:t-9e7,ats:t-8e7},{id:2,pid:7,uid:0,nm:"Зарина",q:"Кафолат чанд моҳ?",a:"",ts:t-5e7,ats:0}],
 chats:[],po:[],sh:[],cards:CARDS0(),shopPhone:"+992 90 000 00 00",autoPay:true,ann:"",theme:"ivory",th2:1,used:{},acc:[],sq:{"iPhone":9,"Nike":7,"Sony":5,"Apple Watch":4},pts:{},cu:{},prof:{},log:[]};if(!seed.empty)genDemo(s0);return s0}
 function mig(j){if(!j||!Array.isArray(j.users)||!Array.isArray(j.orders)||!j.prof||typeof j.prof!=="object")return null;const s=seed();
-["orders","pts","cu","log","meId","seq","lang","cur","com","prof","po","cards","shopPhone","autoPay","ann","theme","used","acc","feeOther","newc","th2","banners"].forEach(k=>{if(j[k]!==undefined)s[k]=j[k]});
+["orders","pts","cu","log","meId","seq","lang","cur","com","prof","po","cards","shopPhone","autoPay","ann","theme","used","acc","feeOther","newc","th2","banners","cloud","out"].forEach(k=>{if(j[k]!==undefined)s[k]=j[k]});
 if(j.v>=VER){["users","products","stores","cats","cities","coupons","qa","chats","sh","sq","reviews"].forEach(k=>{if(Array.isArray(j[k])||(k==="sq"&&j[k]&&typeof j[k]==="object"))s[k]=j[k]})}
 else{s.users=j.users.concat(s.users.filter(x=>!j.users.some(y=>y.id===x.id)));s.reviews=s.reviews.concat((j.reviews||[]).filter(r=>r&&r.pid))}
 Object.values(s.prof).forEach(p=>{if(p&&Array.isArray(p.favs))p.favs=p.favs.map(f=>typeof f==="number"?{pid:f,pr:0}:f)});
@@ -288,13 +290,13 @@ s.orders.forEach(o=>{if(o.pay&&!o.pay.ps)o.pay.ps="";(o.subs||[]).forEach(x=>{if
 function load(){let s=null;try{s=mig(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){s=null}
 if(!s){s=seed();try{const o=JSON.parse(localStorage.getItem(OLD)||"null");if(o&&Array.isArray(o.users))o.users.forEach(x=>{if(x&&x.phone&&!s.users.some(y=>dg(y.phone)===dg(x.phone)))s.users.push({id:Math.max(...s.users.map(y=>y.id))+1,name:String(x.name||"User").slice(0,60),phone:String(x.phone),pw:hs(String(x.pass||"")),role:"buyer"})})}catch(e){}}return s}
 function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2600)}
-function flush(){S.wts=Date.now();const j=JSON.stringify(S);if(IDB)idbPut("state",j,"kv");try{localStorage.setItem(KEY,j)}catch(e){try{localStorage.removeItem(KEY)}catch(x){}if(!IDB)toast(T("quota"))}}
+function flush(){S.wts=Date.now();const j=JSON.stringify(S);if(IDB)idbPut("state",j,"kv");try{localStorage.setItem(KEY,j)}catch(e){try{localStorage.removeItem(KEY)}catch(x){}if(!IDB)toast(T("quota"))}cloudSaved()}
 let _sv;const save=()=>{clearTimeout(_sv);_sv=setTimeout(flush,250)};
 function ask(msg){return new Promise(res=>{const old=$(".mdl");if(old)old.remove();const prev=document.activeElement,w=document.createElement("div");w.className="mdl";w.setAttribute("role","alertdialog");w.setAttribute("aria-modal","true");w.setAttribute("aria-labelledby","mdl-t");w.innerHTML=`<div class="mdl-b"><p id="mdl-t">${esc(msg)}</p><div class="mdl-r"><button type="button" class="btn alt" data-r="n">${esc(T("no"))}</button><button type="button" class="btn" data-r="y">${esc(T("yes"))}</button></div></div>`;let ok=0;const done=v=>{if(ok)return;ok=1;document.removeEventListener("keydown",kd,true);w.remove();try{prev&&prev.focus&&prev.focus()}catch(e){}res(v)},kd=e=>{if(e.key==="Escape"){e.preventDefault();done(false)}else if(e.key==="Tab"){const b=[...w.querySelectorAll("button")],i=b.indexOf(document.activeElement);e.preventDefault();b[(i+(e.shiftKey?b.length-1:1))%b.length].focus()}},pick=e=>{e.preventDefault();e.stopPropagation();const b=e.target.closest("[data-r]");if(b)done(b.dataset.r==="y");else if(e.target===w)done(false)};w.addEventListener("click",pick);document.addEventListener("keydown",kd,true);document.body.appendChild(w);const y=w.querySelector("[data-r=y]");if(y)y.focus()})}
 const uid=()=>S.meId||"g",me=()=>S.users.find(u=>u.id===S.meId)||null;
 const pf=u=>{u=u||uid();const p=S.prof[u]||(S.prof[u]={});["cart","later","favs","addr","rv","nt","cmp","rs","gord","alerts"].forEach(k=>{if(!Array.isArray(p[k]))p[k]=[]});if(typeof p.cp!=="string")p.cp="";if(!p.set)p.set={n:1};return p};
 const log=a=>{S.log.push({ts:Date.now(),u:uid(),a});if(S.log.length>200)S.log.shift()};
-const note=(u,k,p,ty)=>{if(typeof u==="string"&&u.startsWith("g:"))u="g";const f=pf(u);if(f.set.n===0)return;f.nt.unshift({id:NID(),k,p,ty:ty||"ord",ts:Date.now(),u:1});bnote(f,u,k,p);if(f.nt.length>40)f.nt.pop()};
+const note=(u,k,p,ty)=>{if(cloudNote(u,k,p,ty))return;if(typeof u==="string"&&u.startsWith("g:"))u="g";const f=pf(u);if(f.set.n===0)return;f.nt.unshift({id:NID(),k,p,ty:ty||"ord",ts:Date.now(),u:1});bnote(f,u,k,p);if(f.nt.length>40)f.nt.pop()};
 const prod=id=>S.products.find(p=>p.id===id),vari=(p,vid)=>p&&p.vs.find(v=>v.id===vid),ORD=id=>S.orders.find(o=>o.id===id),store=id=>S.stores.find(s=>s.id===id),catOf=id=>S.cats.find(c=>c.id===id);
 const vis=p=>{const s=store(p.sid),c=catOf(p.cat);return p.ap==="approved"&&!!s&&s.ver==="ok"&&!s.blocked&&(!c||c.on)};
 const lvl=u=>{const p=S.pts[u]||0;return p>=500?2:p>=100?1:0};
@@ -324,8 +326,8 @@ const can=(o,s,u,to)=>!!u&&(u.role==="admin"||(u.role==="seller"&&u.sid===s.sid)
 const need=r=>{const u=me();return u&&u.role===r?"":`<p class="box warn bad">${T("unauth")}</p>`};
 function readImg(f,max,q){return new Promise((ok,no)=>{if(!f||!/^image\/(jpeg|png|webp)$/.test(f.type))return no("e_img");if(f.size>25e6)return no("e_big");const fr=new FileReader();fr.onerror=()=>no("e_img");fr.onload=()=>{const im=new Image();im.onerror=()=>no("e_img");im.onload=()=>{try{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);ok(enc(c,q))}catch(e){no("e_img")}};im.src=fr.result};fr.readAsDataURL(f)})}
 function avgColor(url){return new Promise(ok=>{const im=new Image();im.onerror=()=>ok(null);im.onload=()=>{try{const c=document.createElement("canvas");c.width=c.height=16;const x=c.getContext("2d");x.drawImage(im,0,0,16,16);const d=x.getImageData(0,0,16,16).data;let r=0,g=0,b=0,n=0;for(let i=0;i<d.length;i+=4){if(d[i+3]<20)continue;r+=d[i];g+=d[i+1];b+=d[i+2];n++}n=n||1;ok([r/n,g/n,b/n])}catch(e){ok(null)}};im.src=url})}
-function chatOf(u,sid,mkc){let c=S.chats.find(x=>x.uid===u&&x.sid===sid);if(!c&&mkc){c={id:NID(),uid:u,sid,msgs:[]};S.chats.push(c)}return c}
-function say(c,from,t,img,bot){c.msgs.push({from,t:String(t).slice(0,500),img:putImg(img||""),ts:Date.now(),rd:0,bot:bot?1:0});if(c.msgs.length>100)c.msgs.shift();save()}
+function chatOf(u,sid,mkc){let c=S.chats.find(x=>x.uid===u&&x.sid===sid);if(!c&&mkc){c={id:NID(),uid:u,sid,bn:((me()||{}).name||""),msgs:[]};S.chats.push(c)}return c}
+function say(c,from,t,img,bot){c.msgs.push({id:"m"+NID(),from,t:String(t).slice(0,500),img:putImg(img||""),ts:Date.now(),rd:0,bot:bot?1:0});if(c.msgs.length>100)c.msgs.shift();save()}
 const unreadFor=(c,side)=>c.msgs.filter(m=>m.from!==side&&!m.rd).length;
 
 const C={},F={q:"",cat:"",sub:"",brand:"",sid:"",min:"",max:"",r:"",stock:"",disc:"",col:"",size:"",sort:"rec",n:24};let SEL=null,AU="login";
@@ -531,7 +533,7 @@ pfsave:()=>{const u=me(),n=$("#s_nm").value.trim(),e=$("#s_em").value.trim();if(
 pwsave:()=>{const u=me(),o=$("#s_o").value,n=$("#s_n").value;if(!u||u.pw!==hs(o)){toast(T("e_cred"));return}if(n.length<4){toast(T("e_pw"));return}if(n!==$("#s_n2").value){toast(T("e_pw2"));return}u.pw=hs(n);save();toast(T("ok"));render(1)},
 fc:d=>{F.fc=d.v;render(1)},
 sellreg:()=>{const u=me(),g=i=>$("#"+i).value.trim(),n=g("sl_n"),ow=g("sl_o"),ph=g("sl_p"),em=g("sl_e"),ad=g("sl_a"),inn=g("sl_i");if(!u||u.role!=="buyer")return;if(!n||!ow||!ad){toast(T("e_req"));return}if(dg(ph).length<9){toast(T("e_ph"));return}if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast("Email?");return}if(!/^\d{9,12}$/.test(inn)){toast(Q(["ИНН нодуруст","ИНН неверный","Invalid tax ID"]));return}
-const id=Math.max(0,...S.stores.map(s=>s.id))+1;S.stores.push({id,n:n.slice(0,40),owner:ow.slice(0,60),phone:ph,email:em,addr:ad.slice(0,100),inn,ver:"pending",blocked:false,desc:""});u.role="seller";u.sid=id;S.users.forEach(x=>{if(x.role==="admin")note(x.id,"n_new",n+" (verification)","ord")});log("seller-reg:"+id);save();go("#/seller")},
+const id=newId(S.stores);S.stores.push({id,uid:u.id,n:n.slice(0,40),owner:ow.slice(0,60),phone:ph,email:em,addr:ad.slice(0,100),inn,ver:"pending",blocked:false,desc:""});u.role="seller";u.sid=id;S.users.forEach(x=>{if(x.role==="admin")note(x.id,"n_new",n+" (verification)","ord")});log("seller-reg:"+id);save();go("#/seller")},
 exp:()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(expObj())],{type:"application/json"}));a.download="shopnova-v4-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1e3)},
 rst:async()=>{if(!await ask(T("sure")))return;S=seed();flush();go("#/home");render()}});
 function chatNote(t){const c=CHS.c;if(!c)return;if(CHS.side==="b"){if(c.sid){S.users.forEach(x=>{if(x.role==="seller"&&x.sid===c.sid)note(x.id,"n_chat",t.slice(0,30),"chat")})}else{S.users.forEach(x=>{if(x.role==="admin")note(x.id,"n_chat",t.slice(0,30),"chat")})}}else note(c.uid,"n_chat",t.slice(0,30),"chat")}
@@ -570,7 +572,7 @@ if(tab==="reviews"){const ids=ps.map(p=>p.id),rv=S.reviews.filter(r=>ids.include
 return`${hd(Q(["Шарҳ ва саволҳо","Отзывы и вопросы","Reviews & questions"]))}<div class="sh"><h2>${Q(["Саволҳо","Вопросы","Questions"])}</h2></div>${qa.map(q=>`<div class="box"><b>${esc((prod(q.pid)||{}).n||"")}</b><p>${esc(q.nm)}: ${esc(q.q)}</p>${q.a?`<p style="color:var(--b)">${esc(q.a)}</p>`:`<div class="row"><input id="qa_a_${q.id}" maxlength="300" aria-label="${Q(["Ҷавоб","Ответ","Answer"])}" style="flex:1;min-width:0;padding:9px;border:1px solid var(--ln);border-radius:10px"><button class="btn sm" data-a="qans" data-id="${q.id}">${T("send")}</button></div>`}</div>`).join("")||`<p class="mut">—</p>`}<div class="sh"><h2>${Q(["Шарҳҳо","Отзывы","Reviews"])}</h2></div>${rv.map(r=>`<div class="box"><b>${esc((prod(r.pid)||{}).n||"")}</b> <span class="stars">${"★".repeat(r.r)}</span><p>${esc(r.nm)}: ${esc(r.t)}</p></div>`).join("")||`<p class="mut">—</p>`}`}
 if(tab==="coupons")return cpTab(0);if(tab==="promo")return promoTab(0,ps);
 if(tab==="fin"){const paid=(S.po||[]).filter(x=>x.sid===st.id&&x.st!=="no").reduce((a,x)=>a+x.amt,0),av=Math.max(0,f.net-paid);return`${hd(Q(["Даромад ва пардохт","Доход и выплаты","Revenue & payouts"]))}<div class="tiles"><div class="tile"><b>${M(f.rev)}</b><span>${Q(["Даромад","Доход","Revenue"])}</span></div><div class="tile"><b>${M(f.com)}</b><span>${Q(["Комиссия","Комиссия","Commission"])} ${S.com}%</span></div><div class="tile"><b>${M(f.net)}</b><span>${Q(["Даромади соф","Чистый доход","Net revenue"])}</span></div><div class="tile"><b>${M(av)}</b><span>${Q(["Барои баровардан","К выводу","Available"])}</span></div></div><p class="mut">${Q(["Фармоишҳои бекор ва баргардонидашуда ба даромад дохил намешаванд.","Отменённые и возвращённые заказы не входят в доход.","Cancelled and refunded orders are excluded."])}</p><button class="btn blk" data-a="porq"${av>0?"":" disabled"}>${Q(["Дархости баровардан","Запросить выплату","Request payout"])}</button>${(S.po||[]).filter(x=>x.sid===st.id).reverse().map(x=>`<div class="box row"><span class="sp">${dt(x.ts)}</span><b>${M(x.amt)}</b><span class="pill">${x.st}</span></div>`).join("")}`}
-if(tab==="chat"){if(arg){const c=S.chats.find(x=>x.id===+arg&&x.sid===st.id);if(!c)return nf();CHS={sid:st.id,side:"s",c};save();const b=S.users.find(x=>x.id===c.uid);return thread(c,"s",b?b.name:"")}const a=S.chats.filter(c=>c.sid===st.id);return`${hd(Q(["Чат","Чат","Chat"]))}<div class="list">${a.map(c=>{const b=S.users.find(x=>x.id===c.uid),l=c.msgs[c.msgs.length-1],n=unreadFor(c,"s");return`<a class="rw" href="#/seller/chat/${c.id}"><span class="ri">${ic("user")}</span><span><b>${esc(b?b.name:"")}</b><br><small class="mut">${l?esc(l.t.slice(0,40)):""}</small></span>${n?`<i class="dot" style="position:static">${n}</i>`:ic("chev")}</a>`}).join("")||`<div class="rw">${Q(["Чате нест","Чатов нет","No chats"])}</div>`}</div>`}
+if(tab==="chat"){if(arg){const c=S.chats.find(x=>x.id===+arg&&x.sid===st.id);if(!c)return nf();CHS={sid:st.id,side:"s",c};save();const b=S.users.find(x=>x.id===c.uid);return thread(c,"s",b?b.name:(c.bn||""))}const a=S.chats.filter(c=>c.sid===st.id);return`${hd(Q(["Чат","Чат","Chat"]))}<div class="list">${a.map(c=>{const b=S.users.find(x=>x.id===c.uid),l=c.msgs[c.msgs.length-1],n=unreadFor(c,"s");return`<a class="rw" href="#/seller/chat/${c.id}"><span class="ri">${ic("user")}</span><span><b>${esc(b?b.name:(c.bn||""))}</b><br><small class="mut">${l?esc(l.t.slice(0,40)):""}</small></span>${n?`<i class="dot" style="position:static">${n}</i>`:ic("chev")}</a>`}).join("")||`<div class="rw">${Q(["Чате нест","Чатов нет","No chats"])}</div>`}</div>`}
 if(tab==="store")return storeForm(st,0);if(tab==="pay")return sellerPay(st);const rv=S.reviews.filter(r=>ps.some(p=>p.id===r.pid)),ra=rv.length?(rv.reduce((a,r)=>a+r.r,0)/rv.length).toFixed(1):"—",best={};subs.forEach(([o,s])=>{if(s.st==="delivered")s.items.forEach(x=>best[x.n]=(best[x.n]||0)+x.q)});
 const act=ps.filter(p=>p.ap==="approved"&&stockOf(p)>0).length,oos=ps.filter(p=>stockOf(p)<=0).length,dl=subs.filter(x=>x[1].st==="delivered").length,pn=subs.filter(x=>["pending","confirmed","processing","packed"].includes(x[1].st)).length,uc=S.chats.filter(c=>c.sid===st.id).reduce((a,c)=>a+unreadFor(c,"s"),0),uq=S.qa.filter(q=>!q.a&&ps.some(p=>p.id===q.pid)).length;
 return`${hd(Q(["Панели фурӯшанда","Панель продавца","Seller panel"]),`<span class="sp0"></span>`)}<div class="box row"><span class="ri">${ic("store")}</span><span class="sp"><b>${esc(st.n)}</b><br><small class="mut">${Q(vp)}</small></span></div>${warn}
@@ -594,7 +596,7 @@ S.orders.forEach(o=>o.subs.forEach(s=>{if(s.st==="delivered"){const b=s.sub-s.ds
 return`${hd(Q(ADT.reports))}<div class="tiles"><div class="tile"><b>${M(f.rev)}</b><span>${Q(["Фурӯш (расонидашуда)","Продажи (доставл.)","Sales (delivered)"])}</span></div><div class="tile"><b>${M(f.com)}</b><span>${Q(["Комиссия","Комиссия","Commission"])}</span></div><div class="tile"><b>${S.orders.length}</b><span>${T("orders")}</span></div></div><div class="box"><b>${Q(["7 рӯзи охир (маблағи фармоишҳо)","Последние 7 дней (сумма заказов)","Last 7 days (order totals)"])}</b><div class="bars">${sl.map((v,i)=>`<div><i style="height:${Math.round(v*100/mx)}%" title="${M(v)}"></i>${new Date(days[i]).getDate()}<br>${cn[i].length}</div>`).join("")}</div></div>
 <div class="box ov"><table class="tbl"><tr><th>${Q(["Мағоза","Магазин","Store"])}</th><th>${Q(["Даромад","Доход","Revenue"])}</th></tr>${Object.entries(bs).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${M(v)}</td></tr>`).join("")||`<tr><td colspan=2 class="mut">—</td></tr>`}<tr><th>${Q(["Категория","Категория","Category"])}</th><th></th></tr>${Object.entries(cs).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${M(v)}</td></tr>`).join("")||`<tr><td colspan=2 class="mut">—</td></tr>`}</table></div><p class="mut">${Q(["Ҳамаи рақамҳо аз фармоишҳои сабтшуда ҳисоб мешаванд.","Все цифры считаются из сохранённых заказов.","All figures are computed from recorded orders."])}</p>`}
 if(tab==="settings")return`${hd(Q(ADT.settings))}${adminExtra()}${cityExtra()}<div class="box"><label class="f" style="margin-top:0">${Q(["Комиссия %","Комиссия %","Commission %"])}<input id="cm_p" type="number" min="0" max="30" step="0.5" value="${S.com}"></label><button class="btn sm" data-a="comsave">${T("save")}</button></div><div class="sh"><h2>${Q(["Шаҳрҳо ва ҳаққи расонидан","Города и доставка","Cities & delivery fees"])}</h2></div>${S.cities.map((c,i)=>`<div class="box row"><b class="sp">${esc(c[0])}</b><input id="cf_${i}" type="number" min="0" value="${c[1]}" aria-label="${Q(["Ҳаққи расонидан","Стоимость","Fee"])}" style="width:90px;padding:8px;border:1px solid var(--ln);border-radius:10px"><button class="btn alt sm" data-a="ctsave" data-id="${i}">${T("save")}</button><button class="btn red sm" data-a="ctdel" data-id="${i}">${ic("trash")}</button></div>`).join("")}<div class="box row"><input id="ct_n" placeholder="${Q(["Шаҳри нав","Новый город","New city"])}" aria-label="${Q(["Шаҳр","Город","City"])}" maxlength="30" style="flex:1;min-width:0;padding:9px;border:1px solid var(--ln);border-radius:10px"><input id="ct_f" type="number" min="0" value="30" aria-label="${Q(["Ҳаққи расонидан","Стоимость","Fee"])}" style="width:80px;padding:9px;border:1px solid var(--ln);border-radius:10px"><button class="btn sm" data-a="ctadd">${ic("plus")}</button></div>`;
-if(tab==="support"){if(arg){const c=S.chats.find(x=>x.uid===+arg&&x.sid===0);if(!c)return nf();CHS={sid:0,side:"s",c};save();const b=S.users.find(x=>x.id===c.uid);return thread(c,"s",b?b.name:"")}return`${hd(Q(ADT.support))}<div class="list">${S.chats.filter(c=>c.sid===0).map(c=>{const b=S.users.find(x=>x.id===c.uid),l=c.msgs[c.msgs.length-1],n=unreadFor(c,"s");return`<a class="rw" href="#/admin/support/${c.uid}"><span class="ri">${ic("user")}</span><span><b>${esc(b?b.name:"")}</b><br><small class="mut">${l?esc(l.t.slice(0,40)):""}</small></span>${n?`<i class="dot" style="position:static">${n}</i>`:ic("chev")}</a>`}).join("")||`<div class="rw">${Q(["Чате нест","Чатов нет","No chats"])}</div>`}</div>`}
+if(tab==="support"){if(arg){const c=S.chats.find(x=>x.uid===+arg&&x.sid===0);if(!c)return nf();CHS={sid:0,side:"s",c};save();const b=S.users.find(x=>x.id===c.uid);return thread(c,"s",b?b.name:(c.bn||""))}return`${hd(Q(ADT.support))}<div class="list">${S.chats.filter(c=>c.sid===0).map(c=>{const b=S.users.find(x=>x.id===c.uid),l=c.msgs[c.msgs.length-1],n=unreadFor(c,"s");return`<a class="rw" href="#/admin/support/${c.uid}"><span class="ri">${ic("user")}</span><span><b>${esc(b?b.name:(c.bn||""))}</b><br><small class="mut">${l?esc(l.t.slice(0,40)):""}</small></span>${n?`<i class="dot" style="position:static">${n}</i>`:ic("chev")}</a>`}).join("")||`<div class="rw">${Q(["Чате нест","Чатов нет","No chats"])}</div>`}</div>`}
 if(tab==="bc")return`${hd(Q(ADT.bc))}<div class="box"><label class="f" style="margin-top:0">${Q(["Навъ","Тип","Type"])}<select id="bc_t"><option value="cp">${Q(["Купон","Купон","Coupon"])}</option><option value="fl">${Q(["Аксия","Акция","Flash deal"])}</option></select></label><label class="f">${Q(["Матн","Текст","Text"])}<input id="bc_x" maxlength="100"></label><button class="btn sm" data-a="bcast">${T("send")}</button></div>`;
 if(tab==="data")return`${hd(Q(ADT.data))}${dataBox()}<div class="box mut">${Q(["Корбарон","Пользователи","Users"])}: ${S.users.length} · ${Q(["Маҳсулот","Товары","Products"])}: ${S.products.length} · ${T("orders")}: ${S.orders.length} · ${Q(["Шарҳ","Отзывы","Reviews"])}: ${S.reviews.length}</div>`;
 if(tab==="log")return`${hd(Q(ADT.log))}<div class="box mut">${S.log.slice(-50).reverse().map(x=>dt(x.ts)+" · "+esc(x.u)+" · "+esc(x.a)).join("<br>")||"—"}</div>`;
@@ -630,7 +632,7 @@ ok("Роли харидор наметавонад статус иваз кун�
 ok("esc() XSS: <img onerror> → матн",esc('<img src=x onerror=alert(1)>"\'').indexOf("<")<0);ok("mig(null) → null (вайроншавӣ)",mig(null)===null&&mig({users:1})===null);
 ok("Миграция: v4 favs → объектҳо",(()=>{const j=JSON.parse(JSON.stringify(S));j.v=4;j.prof={5:{favs:[3]}};const m=mig(j);return m&&m.prof[5].favs[0].pid===3})());
 ok("Ҳамаи нусхаҳои L се забона",Object.values(L).every(a=>a.length===3&&a.every(x=>x)));
-ok("Ҳар маҳсулот: нарх>0, захира≥0, SKU ягона",(()=>{const k=new Set();return S.products.every(p=>p.vs.every(v=>v.pr>0&&v.st>=0&&!k.has(v.sku)&&k.add(v.sku)))})());extTests(ok,t);extTests2(ok,t);extTests3(ok,t);extTests4(ok,t);extTests5(ok,t);extTests6(ok,t);extTests7(ok,t)}catch(e){ok("Хато: "+e.message,false)}finally{S=bak}
+ok("Ҳар маҳсулот: нарх>0, захира≥0, SKU ягона",(()=>{const k=new Set();return S.products.every(p=>p.vs.every(v=>v.pr>0&&v.st>=0&&!k.has(v.sku)&&k.add(v.sku)))})());extTests(ok,t);extTests2(ok,t);extTests3(ok,t);extTests4(ok,t);extTests5(ok,t);extTests6(ok,t);extTests7(ok,t);extTests8(ok,t)}catch(e){ok("Хато: "+e.message,false)}finally{S=bak}
 const f=R.filter(x=>!x[1]).length;return`${hd(T("test"))}<h2>${R.length-f}/${R.length} PASS</h2><div class="box">${R.map(([n,p])=>`<div>${p?"✅":"❌"} ${esc(n)}</div>`).join("")}</div><div class="box mut">${Q(["Калидҳои тарҷумаи гумшуда","Отсутствующие переводы","Missing translations"])}: ${[...MISS].join(", ")||"—"}</div>`}
 const adm=()=>{const u=me();if(!u||u.role!=="admin"){toast(T("unauth"));return null}return u};
 const slr=()=>{const u=me();if(!u||u.role!=="seller"||!store(u.sid)){toast(T("unauth"));return null}return u};
@@ -641,7 +643,7 @@ const vs=[],seen=new Set();for(const v of f.vs){const lb=String(v.lb).trim(),pr=
 const old=Math.round(+f.old)||0,w=Math.max(0,Math.min(60,Math.floor(+f.w)||0)),sp=String(f.sp).replace(/[^\p{L}\p{N}\s=;.,\-+%/°×]/gu,"").slice(0,300),c=catOf(f.cat);
 if(f.id){const p=prod(f.id);if(!p||(!isA&&p.sid!==st.id)){toast(T("unauth"));return}if(isA)p.sid=st.id;const om=minP(p);Object.assign(p,{n:f.n.trim().slice(0,80),b:f.b.trim().slice(0,30),cat:f.cat,sub:f.sub,d:f.d.trim().slice(0,200),old,w,sp,imgs:f.imgs.slice(0,4).map(putImg)});
 let mx=Math.max(...p.vs.map(v=>+v.id.slice(1)));p.vs=vs.map(v=>{const e=v.id&&vari(p,v.id);if(e){if(v.st!==e.st)stk(p,e,v.st-e.st,"manual");e.lb=v.lb;e.pr=v.pr;e.c=v.c;return e}mx++;return{id:"v"+mx,lb:v.lb,pr:v.pr,st:v.st,c:v.c,sku:"SN-"+p.id+"-"+mx}});priceDrop(p,om)}
-else{const id=Math.max(0,...S.products.map(p=>p.id))+1;S.products.push({id,n:f.n.trim().slice(0,80),b:f.b.trim().slice(0,30),cat:f.cat,sub:f.sub,sid:st.id,old,t:c.t||"bx",c:c.c||"#6b6a86",sp,w,d:f.d.trim().slice(0,200),vs:vs.map((v,i)=>({id:"v"+(i+1),lb:v.lb,pr:v.pr,st:v.st,c:v.c,sku:"SN-"+id+"-"+(i+1)})),flash:null,pop:0,ts:Date.now(),ap:isA?"approved":"pending",imgs:f.imgs.slice(0,4).map(putImg)});S.users.forEach(x=>{if(x.role==="admin")note(x.id,"n_new",f.n.trim().slice(0,30),"ord")})}
+else{const id=newId(S.products);S.products.push({id,n:f.n.trim().slice(0,80),b:f.b.trim().slice(0,30),cat:f.cat,sub:f.sub,sid:st.id,old,t:c.t||"bx",c:c.c||"#6b6a86",sp,w,d:f.d.trim().slice(0,200),vs:vs.map((v,i)=>({id:"v"+(i+1),lb:v.lb,pr:v.pr,st:v.st,c:v.c,sku:"SN-"+id+"-"+(i+1)})),flash:null,pop:0,ts:Date.now(),ap:isA?"approved":"pending",imgs:f.imgs.slice(0,4).map(putImg)});S.users.forEach(x=>{if(x.role==="admin")note(x.id,"n_new",f.n.trim().slice(0,30),"ord")})}
 log("product:"+(f.id||"new"));PFm.id=0;PFm.vs=[];save();toast(T("ok"));go(isA?"#/admin/products":"#/seller/products")},
 pdel:async d=>{const u=slr(),p=prod(+d.id);if(!u||!p||p.sid!==u.sid){toast(T("unauth"));return}if(!await ask(T("sure")))return;S.products=S.products.filter(x=>x!==p);log("product-del:"+p.id);save();render(1)},
 vsave:d=>{const u=slr(),p=prod(+d.p),v=p&&vari(p,d.v);if(!u||!p||p.sid!==u.sid||!v){toast(T("unauth"));return}const pr=Math.round(+$("#pr_"+d.p+"_"+d.v).value),sk=Math.floor(+$("#st_"+d.p+"_"+d.v).value);if(!(pr>0)||!isFinite(pr)||!(sk>=0)||!isFinite(sk)){toast(T("e_price"));return}
@@ -751,7 +753,7 @@ const x=S.cu[c.code]||{n:0,u:{}};if(x.n>=c.lim)return{err:"cp_lim"};if((x.u[u]||
 const pids=Array.isArray(c.pids)?c.pids:[],el=l=>!l.err&&l.p&&(!c.cat||l.p.cat===c.cat)&&(!c.sid||l.p.sid===c.sid)&&(!pids.length||pids.includes(l.p.id)),bs={};let base=0;(lines||[]).forEach(l=>{if(el(l)){base+=l.tot;bs[l.p.sid]=(bs[l.p.sid]||0)+l.tot}});
 if(!c.cat&&!c.sid&&!pids.length&&!lines)base=sub;if(!base)return{err:"cp_cat"};return{c,bs,base,d:c.type==="fix"?Math.min(c.pct,base):Math.min(Math.round(base*c.pct/100),c.max||1e9)}}
 /* --- order creation: account or guest, card/QR/wallet with receipt check, or cash --- */
-function mk(ck){const m0=me(),P0=pf(),a=P0.addr.find(x=>x.id===ck.ai);if(!a)return{err:T("e_addr")};if(dg(a.phone).length<9)return{err:T("e_ph")};if(m0&&m0.blocked)return{err:T("unauth")};
+function mk(ck){const m0=me(),P0=pf(),a=P0.addr.find(x=>x.id===ck.ai);if(!a)return{err:T("e_addr")};if(dg(a.phone).length<9)return{err:T("e_ph")};if(m0&&m0.blocked)return{err:T("unauth")};if(cloudOn()&&!m0)return{err:T("e_login")};
 const u=m0||{id:"g:"+dg(a.phone),name:a.name,guest:1},cash=ck.pm==="cash",tx=String(ck.tx||"").replace(/\s/g,"");
 if(!cash){if(tx.length<6)return{err:T("e_tx")};if(!ck.rc)return{err:T("e_rc")};if(S.orders.some(o=>o.pay.tx&&o.pay.tx.toLowerCase()===tx.toLowerCase()))return{err:T("e_txdup")};if(S.orders.some(o=>o.pay.rh&&o.pay.rh===ck.rh))return{err:T("e_rcdup")};if(ck.chk&&ck.chk.ok&&S.used&&S.used[ck.chk.h])return{err:T("e_rcdup")}}
 const its=ck.sid?P0.cart.filter(i=>{const p=prod(i.pid);return p&&p.sid===ck.sid}):P0.cart,c=calc(its,a.city,ck.mth,P0.cp,u.id);if(!c.lines.length)return{err:T("e_empty")};if(c.bad)return{err:T("e_stock")};if(c.cp&&c.cp.err)return{err:T(c.cp.err)};
@@ -761,7 +763,7 @@ ls.forEach(l=>{if(flashOn(l.p,l.q)&&l.pr!==l.v.pr)l.p.flash.left=Math.max(0,l.p.
 return{sid:+sid,items:ls.map(l=>({pid:l.p.id,vid:l.v.id,n:l.p.n,lb:l.v.lb,q:l.q,pr:l.pr})),sub:sb,ds,st:"pending",track:"",hist:[{st:"pending",ts:Date.now()}]}});
 if(c.cp&&c.cp.c){const k=c.cp.c.code,x=S.cu[k]||(S.cu[k]={n:0,u:{}});x.n++;x.u[u.id]=(x.u[u.id]||0)+1}
 const good=!cash&&ck.chk&&ck.chk.ok,auto=good&&S.autoPay;
-const o={id:"SN"+(S.seq++),uid:u.id,ts:Date.now(),city:a.city,adr:a.street+", "+a.house+(a.apt?" / "+a.apt:""),nm:a.name,ph:a.phone,nt:a.note||"",mth:ck.mth,pm:ck.pm,ps:cash?"Нақд":ck.ps,slot:ck.slot||"",
+const o={id:oid(),uid:u.id,ts:Date.now(),city:a.city,adr:a.street+", "+a.house+(a.apt?" / "+a.apt:""),nm:a.name,ph:a.phone,nt:a.note||"",mth:ck.mth,pm:ck.pm,ps:cash?"Нақд":ck.ps,slot:ck.slot||"",
 pay:{to:ck.to||null,tx:cash?"":tx,st:cash?"cod":auto?"paid":"verifying",cod:cash,rc:cash?"":putImg(ck.rc),rh:cash?"":ck.rh,ts:Date.now(),vts:auto?Date.now():0,chk:!cash&&ck.chk?{ok:ck.chk.ok,r:ck.chk.r,amt:ck.chk.amt,op:ck.chk.op}:null},sub:c.sub,disc:c.disc,fee:c.fee,total:c.total,code:c.cp&&c.cp.c?c.cp.c.code:"",com:S.com,subs};
 if(good){S.used=S.used||{};S.used[ck.chk.h]=o.id}S.orders.push(o);if(!m0)P0.gord.push(o.id);P0.cart=ck.sid?P0.cart.filter(i=>!its.includes(i)):[];P0.cp="";
 note(u.id,"n_new",o.id,"ord");S.users.forEach(x=>{if((x.role==="seller"&&subs.some(s=>s.sid===x.sid))||x.role==="admin")note(x.id,"n_new",o.id+" · "+M(o.total),"ord")});log("order:"+o.id+(auto?":autopaid":""));save();return{o}}
@@ -872,8 +874,8 @@ function idbOpen(){return new Promise(res=>{try{const r=indexedDB.open("tajstore
 const idbPut=(k,v,st)=>{if(!IDB)return;try{IDB.transaction(st||"i","readwrite").objectStore(st||"i").put(v,k)}catch(e){}};
 const idbGet=(k,st)=>new Promise(res=>{if(!IDB)return res(null);try{const q=IDB.transaction(st||"i","readonly").objectStore(st||"i").get(k);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null)}catch(e){res(null)}});
 const cacheImg=(k,v)=>{IMG.delete(k);IMG.set(k,v);if(IMG.size>250)IMG.delete(IMG.keys().next().value)};
-function putImg(d){if(typeof d!=="string"||!d.startsWith("data:image/"))return d||"";if(!IDB)return d;const k="idb:"+hs(d)+d.length.toString(36);cacheImg(k,d);idbPut(k,d);return k}
-const isrc=r=>{if(typeof r!=="string")return"";if(r.startsWith("idb:")){if(!/^idb:[a-z0-9]+$/.test(r))return"";const v=IMG.get(r);return v||(PH+'" data-idb="'+r)}return /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(r)?r:""};
+function putImg(d){if(typeof d!=="string"||!d.startsWith("data:image/"))return d||"";if(!IDB&&!cloudOn())return d;const k="idb:"+hs(d)+d.length.toString(36);cacheImg(k,d);if(IDB)idbPut(k,d);cloudUp(k,d);return k}
+const isrc=r=>{if(typeof r!=="string")return"";if(isCloudImg(r))return r;if(r.startsWith("idb:")){if(!/^idb:[a-z0-9]+$/.test(r))return"";const v=IMG.get(r);return v||(PH+'" data-idb="'+r)}return /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(r)?r:""};
 let _io=null;function hydrate(){const im=$$("img[data-idb]");if(!im.length)return;const load=el=>{const k=el.dataset.idb;el.removeAttribute("data-idb");if(IMG.has(k)){el.src=IMG.get(k);return}idbGet(k).then(v=>{if(v&&/^data:image\//.test(v)){cacheImg(k,v);el.src=v}})};if(!("IntersectionObserver" in window)){im.forEach(load);return}if(!_io)_io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){_io.unobserve(e.target);load(e.target)}}),{rootMargin:"300px"});im.forEach(el=>_io.observe(el))}
 async function bootImgs(){IDB=await Promise.race([idbOpen(),new Promise(r=>setTimeout(()=>r(null),1500))]);try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}if(!IDB)return;const j=await idbGet("state","kv");if(j){try{const s=mig(JSON.parse(j));if(s&&(s.wts||0)>=(S.wts||0))S=s}catch(e){}}S.cur="TJS";migImgs()}
 function migImgs(){let n=0;const mv=x=>{if(typeof x==="string"&&x.startsWith("data:image/")&&IDB){n++;return putImg(x)}return x};S.products.forEach(p=>{if(Array.isArray(p.imgs))p.imgs=p.imgs.map(mv)});S.orders.forEach(o=>{if(o.pay)o.pay.rc=mv(o.pay.rc);o.subs.forEach(s=>{if(s.ret)s.ret.img=mv(s.ret.img)})});S.chats.forEach(c=>c.msgs.forEach(m=>{m.img=mv(m.img)}));S.reviews.forEach(r=>{if(r.img)r.img=mv(r.img)});if(n)save()}
@@ -1045,13 +1047,178 @@ hmore:()=>{HN.n+=24;render(1)}});
 Object.assign(C,{bnimg:async el=>{try{BNF.img=putImg(await readImg(el.files[0],800,.62));const pv=$("#bn_pv");if(pv)pv.innerHTML=`<img src="${isrc(BNF.img)}" alt="">`}catch(e){toast(T(e))}}});
 function vHome(){const vp=VP(),fl=vp.filter(p=>flashOn(p)).sort((a,b)=>b.flash.pct-a.flash.pct),end=fl.length?Math.min(...fl.map(p=>p.flash.end)):0,all=[...vp].sort((a,b)=>b.ts-a.ts);
 return`${S.ann?`<div class="warn" role="note" style="margin-bottom:10px">${ic("bell")} ${esc(S.ann)}</div>`:""}${bannersHtml()}${fl.length?`<div class="sh"><h2>${ic("fire")} ${Q(["Аксияҳо","Акции","Deals"])} · ${cd(end)}</h2><a href="#/promo">${T("all")} ›</a></div><div class="hs">${fl.map(pcard).join("")}</div>`:""}
-<div class="sh"><h2>${Q(["Маҳсулот","Товары","Products"])}</h2>${all.length?`<a href="#/s">${T("all")} ›</a>`:""}</div>${all.length?`<div class="grid">${all.slice(0,HN.n).map(pcard).join("")}</div>${all.length>HN.n?`<p style="text-align:center;margin-top:12px"><button class="btn alt" data-a="hmore">${Q(["Бештар","Ещё","Show more"])}</button></p>`:""}`:`<div class="box" style="text-align:center">${Q(["Ҳоло маҳсулот нест","Товаров пока нет","No products yet"])}</div>`}`}
+<div class="sh"><h2>${Q(["Маҳсулот","Товары","Products"])}</h2>${all.length?`<a href="#/s">${T("all")} ›</a>`:""}</div>${all.length?`<div class="grid">${all.slice(0,HN.n).map(pcard).join("")}</div>${all.length>HN.n?`<p style="text-align:center;margin-top:12px"><button class="btn alt" data-a="hmore">${Q(["Бештар","Ещё","Show more"])}</button></p>`:""}`:`<div class="box" style="text-align:center">${cloudLoading()?Q(["Боргирӣ…","Загрузка…","Loading…"]):Q(["Ҳоло маҳсулот нест","Товаров пока нет","No products yet"])}</div>`}`}
 function extTests6(ok,t){const bk=S.banners,now=Date.now();S.banners=[{id:1,t:"A",on:true,end:0,sid:0,ts:1},{id:2,t:"B",on:false,end:0,sid:0,ts:2},{id:3,t:"C",on:true,end:now-1,sid:0,ts:3}];
 const h=bannersHtml();ok("Баннер: танҳо фаъол ва бемӯҳлат нишон дода мешавад",h.includes(">A<")&&!h.includes(">B<")&&!h.includes(">C<"));
 S.banners=[];ok("Бе баннер тасма нест",bannersHtml()==="");const hm=vHome();ok("Саҳифаи асосӣ: танҳо маҳсулот (бе тасмаи тайёр)",!hm.includes('class="trust')&&!hm.includes('class="deal')&&!hm.includes('id="bn"')&&hm.includes('class="grid"'));
 const sl={role:"seller",sid:1},ad={role:"admin"};ok("Фурӯшанда баннери Admin-ро нест карда наметавонад",!canBn(sl,{sid:0})&&canBn(sl,{sid:1})&&canBn(ad,{sid:5}));S.banners=bk}
 
 function extTests7(ok,t){const bk=CHS,u=S.users.find(x=>x.role==="buyer"),c={id:-9,uid:u.id,sid:0,msgs:[]};CHS={sid:0,side:"b",c};say(c,"b","Пардохт чӣ тавр?");chatNote("Пардохт чӣ тавр?");CHS=bk;ok("Чат: ҷавоби худкор нест, танҳо одам ҷавоб медиҳад",c.msgs.length===1&&!String(chatNote).includes("bot(")&&!S.chats.some(x=>x.msgs.some(m=>m.bot)))}
+
+/* ===================== TAJ STORE cloud: Supabase sign-in, data sync and photos ===================== */
+const CLOUD={url:"https://cdhnpbreciwewhfjueui.supabase.co",ref:"cdhnpbreciwewhfjueui",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkaG5wYnJlY2l3ZXdoZmp1ZXVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NDkzMDIsImV4cCI6MjExMTEyNTMwMn0.FLmh2GdQnPV29QsR9i9e-Z2VG_F9nL98fXB1VdfCv1Y"};
+const CL={ses:null,since:null,ready:0,busy:0,pbusy:0,again:0,srv:{},up:{},upb:0,last:0,dir:0,pt:0,boot:0};
+function cloudOn(){try{if(localStorage.getItem("taj-local")==="1")return false}catch(e){}return !!CLOUD.url}
+const pmail=p=>{let d=dg(p);if(d.length===9)d="992"+d;return"t"+d+"@tajstore.app"};
+const myUid=()=>CL.ses&&S.meId?S.meId:null,meU=()=>myUid()?me():null,isAdm=()=>{const u=meU();return!!u&&u.role==="admin"},mySid=()=>{const u=meU();return u&&u.role==="seller"&&u.sid?u.sid:null};
+const oid=()=>cloudOn()?"TS"+(Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36).padStart(2,"0")).toUpperCase():"SN"+(S.seq++);
+const newId=a=>cloudOn()?NID():Math.max(0,...a.map(x=>x.id))+1;
+function sesLoad(){try{CL.ses=JSON.parse(localStorage.getItem("taj-ses")||"null")}catch(e){CL.ses=null}}
+function sesSave(s){CL.ses=s;try{s?localStorage.setItem("taj-ses",JSON.stringify(s)):localStorage.removeItem("taj-ses")}catch(e){}}
+async function rawFetch(path,o){o=o||{};const h={apikey:CLOUD.key};if(o.json!==undefined)h["Content-Type"]="application/json";Object.assign(h,o.h||{});
+const r=await fetch(CLOUD.url+path,{method:o.m||"GET",headers:h,body:o.json!==undefined?JSON.stringify(o.json):o.body});const tx=await r.text();let j=null;try{j=tx?JSON.parse(tx):null}catch(e){}
+if(!r.ok){const e=new Error((j&&(j.message||j.msg||j.error_description||j.error))||("HTTP "+r.status));e.st=r.status;e.j=j;throw e}return j}
+let _rf=null;
+async function tok(){const s=CL.ses;if(!s)return null;if(Date.now()<s.exp-60e3)return s.at;
+if(!_rf)_rf=(async()=>{try{const j=await rawFetch("/auth/v1/token?grant_type=refresh_token",{m:"POST",json:{refresh_token:s.rt}});sesSave(Object.assign({},CL.ses,{at:j.access_token,rt:j.refresh_token,exp:Date.now()+j.expires_in*1e3}))}catch(e){if(e.st>=400&&e.st<500)cloudDrop(1);throw e}finally{_rf=null}})();
+await _rf;return CL.ses&&CL.ses.at}
+async function api(path,o){o=o||{};let t=null;try{t=await tok()}catch(e){if(!e.st)throw e}o.h=Object.assign({Authorization:"Bearer "+(t||CLOUD.key)},o.h||{});return rawFetch(path,o)}
+
+/* ---- local <-> table mapping ---- */
+const SETK=["com","cities","cards","shopPhone","autoPay","ann","feeOther"];
+const cp_=x=>JSON.parse(JSON.stringify(x));
+const omit=(o,ks)=>{const r=Object.assign({},o);ks.forEach(k=>delete r[k]);return r};
+const coreP=d=>{const x=omit(d,["pop","wait"]);x.vs=(d.vs||[]).map(v=>omit(v,["st"]));if(d.flash&&typeof d.flash==="object")x.flash=omit(d.flash,["left"]);return JSON.stringify(x)};
+const onlyK=(n,o,ks)=>JSON.stringify(omit(n.d,ks))===JSON.stringify(omit(o.d,ks));
+const mid=(c,m)=>m.id||(m.id="m"+c.id+"_"+m.ts+"_"+m.from);
+function arrT(t,get,cols,can,key){key=key||"id";return{t,k:"id",
+ one(id){const x=get().find(y=>y&&String(y[key])===String(id));return x?Object.assign(cols(x),{d:x}):undefined},
+ rows(){const m=new Map();get().forEach(x=>{if(x&&x[key]!=null)m.set(String(x[key]),Object.assign(cols(x),{d:x}))});return m},
+ put(r){const a=get(),i=a.findIndex(x=>String(x[key])===String(r.id));const it=r.d||{};it[key]=key==="id"&&typeof r.id==="number"?r.id:it[key]!=null?it[key]:r.id;if(t==="stores")it.uid=r.uid==null?it.uid:r.uid;if(i>=0)a[i]=it;else a.push(it)},
+ drop(id){const a=get(),i=a.findIndex(x=>String(x[key])===String(id));if(i>=0)a.splice(i,1)},can}}
+function mapT(t,get,toD,fromD,can,numId){return{t,k:"id",
+ one(id){const o=get()||{};return Object.prototype.hasOwnProperty.call(o,id)?{d:toD(o[id])}:undefined},
+ rows(){const m=new Map(),o=get()||{};Object.keys(o).forEach(k=>{if(numId&&!/^\d+$/.test(k))return;m.set(String(k),{d:toD(o[k])})});return m},
+ put(r){get()[r.id]=fromD(r.d)},drop(id){delete get()[id]},can,keep:1}}
+const TB=[
+ {t:"settings",k:"id",one(){return this.rows().get("main")},rows(){const d={};SETK.forEach(k=>{if(S[k]!==undefined)d[k]=S[k]});return new Map([["main",{d}]])},put(r){SETK.forEach(k=>{if(r.d&&k in r.d)S[k]=r.d[k]})},drop(){},can:()=>isAdm(),keep:1},
+ arrT("cats",()=>S.cats,()=>({}),(n,o)=>isAdm()||(!!mySid()&&(!o||(JSON.stringify(omit(n.d,["subs"]))===JSON.stringify(omit(o.d,["subs"]))&&(o.d.subs||[]).every(s=>JSON.stringify(n.d.subs||[]).includes(JSON.stringify(s))))))),
+ arrT("stores",()=>S.stores,s=>({uid:s.uid==null?null:s.uid}),(n,o)=>isAdm()||(!o?!!myUid()&&n.uid===myUid():o.d.id===mySid())),
+ {t:"profiles",k:"uid",one(id){const u=S.users.find(x=>x&&!x._dir&&String(x.id)===String(id));return u?{role:u.role||"buyer",sid:u.sid==null?null:u.sid,blocked:!!u.blocked,d:omit(u,["id","pw","role","sid","blocked","_dir"])}:undefined},rows(){const m=new Map();S.users.forEach(u=>{if(u&&!u._dir)m.set(String(u.id),{role:u.role||"buyer",sid:u.sid==null?null:u.sid,blocked:!!u.blocked,d:omit(u,["id","pw","role","sid","blocked","_dir"])})});return m},
+  put(r){const u=Object.assign({},r.d||{},{id:+r.id,role:r.role,sid:r.sid==null?undefined:r.sid,blocked:!!r.blocked});const i=S.users.findIndex(x=>x.id===u.id);if(i>=0)S.users[i]=u;else S.users.push(u)},
+  drop(id){S.users=S.users.filter(x=>String(x.id)!==String(id))},can:(n,o,id)=>!!o&&(isAdm()||+id===myUid())},
+ arrT("products",()=>S.products,p=>({sid:p.sid}),(n,o)=>!!myUid()&&(isAdm()||(!o?n.sid===mySid():(o.sid===mySid()||(n.sid===o.sid&&coreP(n.d)===coreP(o.d)))))),
+ arrT("banners",()=>S.banners||(S.banners=[]),b=>({sid:b.sid||0}),n=>isAdm()||(n.sid>0&&n.sid===mySid())),
+ arrT("coupons",()=>S.coupons,c=>({sid:c.sid==null?null:c.sid}),n=>isAdm()||(n.sid!=null&&n.sid===mySid()),"code"),
+ arrT("orders",()=>S.orders,o=>({buyer:typeof o.uid==="number"?o.uid:-1,sids:o.subs.map(s=>s.sid)}),(n,o)=>!!myUid()&&(!o?n.buyer===myUid():(o.buyer===myUid()||isAdm()||o.sids.includes(mySid())))),
+ {t:"chats",k:"id",one(id){const c=S.chats.find(x=>String(x.id)===String(id));return c?{buyer:c.uid,sid:c.sid,d:omit(c,["msgs"])}:undefined},rows(){const m=new Map();S.chats.forEach(c=>m.set(String(c.id),{buyer:c.uid,sid:c.sid,d:omit(c,["msgs"])}));return m},
+  put(r){const i=S.chats.findIndex(x=>String(x.id)===String(r.id)),old=i>=0?S.chats[i]:null,c=Object.assign({},r.d||{},{id:+r.id,uid:r.buyer,sid:r.sid,msgs:old?old.msgs:[]});if(i>=0)S.chats[i]=c;else S.chats.push(c);const pm=CL.pm||{};Object.keys(pm).forEach(k=>{if(pm[k].chat===c.id){TB_.msgs.put(pm[k]);delete pm[k]}})},
+  drop(id){S.chats=S.chats.filter(x=>String(x.id)!==String(id))},can:(n,o)=>!!myUid()&&(!o?n.buyer===myUid():true),keep:1},
+ {t:"msgs",k:"id",one(id){for(const c of S.chats){const x=c.msgs.find(m=>mid(c,m)===id);if(x)return{chat:c.id,d:x}}return undefined},rows(){const m=new Map();S.chats.forEach(c=>c.msgs.forEach(x=>m.set(String(mid(c,x)),{chat:c.id,d:x})));return m},
+  put(r){const c=S.chats.find(x=>x.id===r.chat);if(!c){(CL.pm||(CL.pm={}))[r.id]=r;return}const m=Object.assign({},r.d||{},{id:r.id}),i=c.msgs.findIndex(x=>x.id===r.id);if(i>=0)c.msgs[i]=m;else{c.msgs.push(m);c.msgs.sort((a,b)=>a.ts-b.ts)}},
+  drop(id){S.chats.forEach(c=>{c.msgs=c.msgs.filter(x=>x.id!==id)})},can:()=>!!myUid(),keep:1},
+ arrT("reviews",()=>S.reviews,r=>({uid:typeof r.uid==="number"?r.uid:null,pid:r.pid}),(n,o)=>!!myUid()&&(!o?n.uid===myUid():(isAdm()||o.uid===myUid()||onlyK(n,o,["hp"])))),
+ arrT("qa",()=>S.qa,q=>({uid:typeof q.uid==="number"?q.uid:null,pid:q.pid}),(n,o)=>{if(!myUid())return false;if(!o)return n.uid===myUid();if(isAdm())return true;const p=prod(o.pid);if(p&&p.sid===mySid())return onlyK(n,o,["a","ats"]);return o.uid===myUid()&&onlyK(n,o,["q"])}),
+ arrT("po",()=>S.po||(S.po=[]),x=>({sid:x.sid}),(n,o)=>!o?n.sid===mySid():isAdm()),
+ mapT("pts",()=>S.pts,n=>({n}),d=>(d&&d.n)||0,()=>isAdm()||!!mySid(),1),
+ mapT("cu",()=>S.cu,v=>v,d=>d,()=>!!myUid()),
+ mapT("used",()=>S.used||(S.used={}),v=>({o:v}),d=>d&&d.o,(n,o)=>!!myUid()&&!o),
+ {t:"prefs",k:"id",one(id){return this.rows().get(String(id))},rows(){const u=myUid();return u&&S.prof[u]?new Map([[String(u),{d:S.prof[u]}]]):new Map()},put(r){if(+r.id===myUid())S.prof[r.id]=r.d||{}},drop(){},can:()=>!!myUid(),keep:1}];
+const TB_={};TB.forEach(x=>TB_[x.t]=x);
+const PRIV=["orders","chats","msgs","po","pts","cu","used","prefs","profiles"];
+
+/* ---- pulling changes from the server ---- */
+function rowJS(T,id){const r=T.one(String(id));return r===undefined?undefined:JSON.stringify(r)}
+function applyRow(T,r){const id=String(r.id),srv=CL.srv[T.t]||(CL.srv[T.t]={}),cur=rowJS(T,id);
+ if(cur!==undefined&&srv[id]!==undefined&&cur!==srv[id])return false; /* local edit waiting to be sent: keep it */
+ if(r.del){if(cur===undefined&&srv[id]===undefined)return false;T.drop(id);delete srv[id];return true}
+ T.put(r);const nw=rowJS(T,id);if(nw!==undefined)srv[id]=nw;return nw!==cur}
+async function pull(){if(!cloudOn()||CL.busy)return;CL.busy=1;let ch=0;const gen=CL.gen||0;
+ try{const j=await api("/rest/v1/rpc/pull",{m:"POST",json:{since:CL.since||"1970-01-01T00:00:00Z"}});if(gen!==(CL.gen||0))return;
+  TB.forEach(T=>{(j[T.t]||[]).forEach(r=>{if(applyRow(T,r))ch=1})});
+  const u=myUid(),ack=[];
+  if(u)(j.notes||[]).forEach(r=>{if(r.to_uid!==u||r.del)return;ack.push(r.id);const f=pf(u);if(f.nt.some(n=>n.rid===r.id))return;const d=r.d||{};f.nt.unshift({id:NID(),rid:r.id,k:d.k,p:d.p,ty:d.ty||"ord",ts:d.ts||Date.now(),u:1});if(f.nt.length>40)f.nt.pop();bnote(f,u,d.k,d.p);ch=1});
+  if(ack.length)api("/rest/v1/notes?id=in.("+ack.map(x=>'"'+String(x).replace(/"/g,"")+'"').join(",")+")",{m:"PATCH",json:{del:true},h:{Prefer:"return=minimal"}}).catch(()=>{});
+  (j.products||[]).forEach(r=>{const p=prod(+r.id);if(p&&!r.del&&CL.ready)checkAlerts(p)});
+  const mine=u&&S.users.find(x=>x.id===u);if(mine&&mine.blocked){cloudDrop(2);return}
+  CL.since=new Date(Date.parse(j.now)-15e3).toISOString();if(!CL.ready){CL.ready=1;ch=1}
+  if(u&&(!CL.dir||Date.now()-CL.dir>6e4))await loadDir();
+  if(ch){flush0();syncRender()}if(CL.again)schedPush()}
+ catch(e){CL.err=Date.now()}finally{CL.busy=0}}
+async function loadDir(){try{const a=await api("/rest/v1/rpc/directory",{m:"POST",json:{}});CL.dir=Date.now();S.users=S.users.filter(x=>!x._dir);(a||[]).forEach(r=>{if(!S.users.some(x=>x.id===r.uid))S.users.push({id:r.uid,name:r.name,role:r.role,sid:r.sid==null?undefined:r.sid,_dir:1})})}catch(e){}}
+
+/* ---- sending local changes ---- */
+function restore(T,id,old){if(old)T.put(Object.assign({id:/^\d+$/.test(id)&&T.t!=="coupons"&&T.t!=="cats"?+id:id},old));else T.drop(id);const nw=rowJS(T,id);if(nw!==undefined)(CL.srv[T.t]||(CL.srv[T.t]={}))[id]=nw;CL.fix=1}
+function schedPush(){clearTimeout(CL.pt);CL.pt=setTimeout(push,350)}
+function cloudSaved(){if(cloudOn()&&CL.ses&&CL.ready)schedPush()}
+async function push(){if(!cloudOn()||!CL.ses||!CL.ready)return;if(CL.pbusy){CL.again=1;return}CL.pbusy=1;CL.again=0;CL.fix=0;let bad=0,neterr=0;
+ const upk=Object.keys(CL.up);
+ try{for(const T of TB){const cur=T.rows(),srv=CL.srv[T.t]||(CL.srv[T.t]={}),ins=[],pat=[],del=[];
+   for(const [id,row] of cur){const js=JSON.stringify(row);if(srv[id]===js)continue;if(upk.length&&upk.some(k=>js.includes(k)))continue;
+    const old=srv[id]!==undefined?JSON.parse(srv[id]):null;if(!T.can(row,old,id)){restore(T,id,old);continue}
+    (old?pat:ins).push([id,row,js])}
+   if(!T.keep)for(const id of Object.keys(srv)){if(cur.has(id))continue;const old=JSON.parse(srv[id]);if(T.can(old,old,id))del.push(id);else restore(T,id,old)}
+   const key=id=>T.t==="profiles"||/^\d+$/.test(id)&&!["cats","coupons","used","cu"].includes(T.t)?+id:id;
+   if(ins.length){try{await api("/rest/v1/"+T.t,{m:"POST",json:ins.map(x=>Object.assign({id:key(x[0])},x[1])),h:{Prefer:"return=minimal"}});ins.forEach(x=>srv[x[0]]=x[2])}
+    catch(e){if(!e.st)throw e;for(const x of ins){try{await api("/rest/v1/"+T.t,{m:"POST",json:[Object.assign({id:key(x[0])},x[1])],h:{Prefer:"return=minimal"}});srv[x[0]]=x[2]}catch(e2){if(!e2.st)throw e2;bad++;restore(T,x[0],null)}}}}
+   for(const x of pat){try{const r=await api("/rest/v1/"+T.t+"?"+T.k+"=eq."+encodeURIComponent(x[0]),{m:"PATCH",json:x[1],h:{Prefer:"return=representation"}});
+     if(Array.isArray(r)&&r.length){srv[x[0]]=x[2];const s0=r[0];const rr=T.t==="profiles"?{id:s0.uid,role:s0.role,sid:s0.sid,blocked:s0.blocked,d:s0.d,del:s0.del}:s0;if(applyRow(T,rr))CL.fix=1}else{bad++;restore(T,x[0],JSON.parse(srv[x[0]]))}}
+    catch(e){if(!e.st)throw e;bad++;if(srv[x[0]]!==undefined)restore(T,x[0],JSON.parse(srv[x[0]]))}}
+   for(const id of del){try{await api("/rest/v1/"+T.t+"?"+T.k+"=eq."+encodeURIComponent(id),{m:"PATCH",json:{del:true},h:{Prefer:"return=minimal"}});delete srv[id]}catch(e){if(!e.st)throw e;bad++;restore(T,id,JSON.parse(srv[id]))}}}
+  const out=(S.out||[]).slice();if(out.length){try{await api("/rest/v1/notes",{m:"POST",json:out,h:{Prefer:"return=minimal"}});S.out=(S.out||[]).filter(x=>!out.includes(x))}catch(e){if(!e.st)throw e;S.out=(S.out||[]).filter(x=>!out.includes(x))}}
+  CL.last=Date.now()-5e3}
+ catch(e){neterr=1;CL.again=1}
+ finally{CL.pbusy=0;if(bad)toast(Q(["Баъзе тағйиротро сервер қабул накард","Сервер отклонил часть изменений","Some changes were rejected by the server"]));if(CL.fix||bad){flush0();syncRender()}if(CL.again){clearTimeout(CL.pt);CL.pt=setTimeout(push,neterr?8e3:350)}}}
+function cloudNote(u,k,p,ty){if(!cloudOn()||!CL.ses||typeof u!=="number"||u===S.meId)return false;(S.out||(S.out=[])).push({id:"n"+NID(),to_uid:u,d:{k,p,ty:ty||"ord",ts:Date.now()}});return true}
+
+/* ---- photos go to cloud storage ---- */
+function cloudUp(k,d){if(cloudOn()&&typeof d==="string"&&d.startsWith("data:image/"))CL.up[k]=d}
+const isCloudImg=r=>typeof r==="string"&&r.startsWith(CLOUD.url+"/storage/v1/object/public/img/")&&/^[\w\/.:-]+$/.test(r);
+async function uploadAll(){if(CL.upb||!CL.ses||!myUid())return;const ks=Object.keys(CL.up);if(!ks.length)return;CL.upb=1;let done=0;
+ try{for(const k of ks){const d=CL.up[k];if(!d)continue;const mm=/^data:(image\/(webp|jpeg|png));base64,/.exec(d);if(!mm){delete CL.up[k];continue}
+   const bin=atob(d.slice(mm[0].length)),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+   const path=myUid()+"/"+k.slice(4)+"-"+Math.random().toString(36).slice(2,10)+"."+(mm[2]==="jpeg"?"jpg":mm[2]);
+   await api("/storage/v1/object/img/"+path,{m:"POST",body:new Blob([u8],{type:mm[1]}),h:{"Content-Type":mm[1],"x-upsert":"false"}});
+   const url=CLOUD.url+"/storage/v1/object/public/img/"+path;swapRef(S,k,url);delete CL.up[k];done++}}
+ catch(e){CL.err=Date.now()}finally{CL.upb=0;if(done){flush0();schedPush()}}}
+function swapRef(o,k,url){if(!o||typeof o!=="object")return;for(const key of Object.keys(o)){const v=o[key];if(v===k)o[key]=url;else if(v&&typeof v==="object"&&key!=="sh"&&key!=="log")swapRef(v,k,url)}}
+
+/* ---- sign in / register / sign out ---- */
+const profRow=r=>({id:r.uid,role:r.role,sid:r.sid,blocked:r.blocked,d:r.d,del:r.del});
+function resetPrivate(){CL.gen=(CL.gen||0)+1;S.orders=[];S.chats=[];S.po=[];S.pts={};S.cu={};S.used={};S.users=[];S.out=[];const g=S.prof.g;S.prof=g?{g}:{};PRIV.forEach(t=>{CL.srv[t]={}});CL.dir=0;CL.pm={}}
+async function cLogin(phone,pw){const j=await rawFetch("/auth/v1/token?grant_type=password",{m:"POST",json:{email:pmail(phone),password:pw}});
+ sesSave({at:j.access_token,rt:j.refresh_token,exp:Date.now()+j.expires_in*1e3,id:j.user.id});
+ const pr=await api("/rest/v1/profiles?select=uid,role,sid,blocked,d,del&id=eq."+j.user.id);const p=pr&&pr[0];
+ if(!p||p.blocked){sesSave(null);const e=new Error(p?"blocked":"profile");e.st=p?403:404;throw e}
+ resetPrivate();CL.ses.uid=p.uid;sesSave(CL.ses);applyRow(TB_.profiles,profRow(p));S.meId=p.uid;CL.since=null;CL.ready=0;for(let i=0;i<80&&CL.busy;i++)await new Promise(r=>setTimeout(r,100));await pull();return me()}
+function cloudDrop(why){sesSave(null);resetPrivate();S.meId=null;CL.since=null;flush0();if(why)toast(why===2?Q(["Аккаунти шумо баста шудааст","Ваш аккаунт заблокирован","Your account is blocked"]):Q(["Лутфан аз нав ворид шавед","Пожалуйста, войдите снова","Please sign in again"]));go("#/home");render()}
+async function cloudLogout(){try{await api("/auth/v1/logout?scope=local",{m:"POST",json:{}})}catch(e){}cloudDrop(0);CL.last=0}
+const busyB=(on)=>{const b=$('#main button[data-a="login"],#main button[data-a="reg"],#main button[data-a="pwsave"]');if(b){b.disabled=on;b.style.opacity=on?.6:""}};
+const netMsg=()=>Q(["Интернет ё сервер дастрас нест. Баъдтар кӯшиш кунед.","Нет связи с сервером. Попробуйте позже.","Can't reach the server. Try again later."]);
+L.e_pw6=["Рамз камаш 6 аломат бошад","Пароль от 6 символов","Password: 6+ characters"];
+{const _login=A.login,_reg=A.reg,_out=A.out,_pw=A.pwsave,_cko=A.cko;
+Object.assign(A,{
+login:async()=>{if(!cloudOn())return _login();const ph=$("#au_ph").value.trim(),pw=$("#au_pw").value;if(dg(ph).length<9){toast(T("e_ph"));return}if(!pw){toast(T("e_cred"));return}
+ busyB(1);try{const u=await cLogin(ph,pw);if(u)enter(u)}catch(e){toast(e.message==="blocked"?Q(["Аккаунт баста шудааст","Аккаунт заблокирован","Account blocked"]):e.st===400||e.st===401||e.st===404?T("e_cred"):netMsg())}finally{busyB(0)}},
+reg:async()=>{if(!cloudOn())return _reg();const nm0=$("#au_nm").value.trim(),ph=$("#au_ph").value.trim(),p1=$("#au_pw").value;if(nm0.length<2){toast(T("e_req"));return}if(dg(ph).length<9||dg(ph).length>13){toast(T("e_ph"));return}if(p1.length<6){toast(T("e_pw6"));return}if(p1!==$("#au_p2").value){toast(T("e_pw2"));return}
+ busyB(1);try{await rawFetch("/functions/v1/register",{m:"POST",json:{name:nm0,phone:ph,password:p1},h:{Authorization:"Bearer "+CLOUD.key}});const u=await cLogin(ph,p1);if(u){toast(u.role==="admin"?Q(["Шумо Admin-и TAJ STORE ҳастед","Вы — администратор TAJ STORE","You are the TAJ STORE admin"]):T("ok"));enter(u)}}
+ catch(e){toast(e.st===409?T("e_dup"):e.j&&e.j.error==="password"?T("e_pw6"):e.j&&e.j.error==="phone"?T("e_ph"):e.st&&e.st<500?T("e_req"):netMsg())}finally{busyB(0)}},
+out:()=>{if(!cloudOn())return _out();cloudLogout()},
+pwsave:async()=>{if(!cloudOn())return _pw();const u=me(),o=$("#s_o").value,n=$("#s_n").value;if(!u){toast(T("e_login"));return}if(n.length<6){toast(T("e_pw6"));return}if(n!==$("#s_n2").value){toast(T("e_pw2"));return}
+ busyB(1);try{await rawFetch("/auth/v1/token?grant_type=password",{m:"POST",json:{email:pmail(u.phone),password:o}})}catch(e){busyB(0);toast(e.st?T("e_cred"):netMsg());return}
+ try{await api("/auth/v1/user",{m:"PUT",json:{password:n}});toast(T("ok"));$("#s_o").value=$("#s_n").value=$("#s_n2").value=""}catch(e){toast(e.st?T("e_pw6"):netMsg())}finally{busyB(0)}},
+cko:d=>{if(cloudOn()&&!me()){toast(Q(["Барои фармоиш ворид шавед ё бақайдгирӣ кунед","Войдите или зарегистрируйтесь, чтобы оформить заказ","Sign in or register to place an order"]));AU="login";go("#/me");return}return _cko(d)}})}
+{const _vCk=vCk;vCk=function(){if(cloudOn()&&!me())return`${hd(Q(["Расмикунонӣ","Оформление","Checkout"]))}<div class="box" style="text-align:center"><p>${Q(["Барои фармоиш ворид шавед ё бақайдгирӣ кунед — ин як дақиқа вақт мегирад.","Чтобы оформить заказ, войдите или зарегистрируйтесь — это займёт минуту.","Sign in or register to place an order — it takes a minute."])}</p><a class="btn" href="#/me">${Q(["Воридшавӣ / Бақайдгирӣ","Вход / Регистрация","Sign in / Register"])}</a></div>`;return _vCk.apply(this,arguments)}}
+{const _vTest=vTest;vTest=function(){if(cloudOn())return`${hd(T("test"))}<div class="box">${Q(["Санҷиши худкор танҳо дар ҳолати маҳаллӣ иҷро мешавад, то маълумоти сервер вайрон нашавад.","Автотест запускается только в локальном режиме, чтобы не портить данные сервера.","The self-test runs only in local mode so server data stays intact."])}</div>`;return _vTest.apply(this,arguments)}}
+
+/* ---- keep what the person is typing when fresh data arrives ---- */
+function flush0(){try{const j=JSON.stringify(S);S.wts=Date.now();if(IDB)idbPut("state",j,"kv");try{localStorage.setItem(KEY,j)}catch(e){}}catch(e){}}
+function syncRender(){if(!$("#main"))return;const m=$("#main"),ae=document.activeElement,typing=ae&&m.contains(ae)&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName),vals={};
+ m.querySelectorAll("input[id],textarea[id],select[id]").forEach(e=>{if(e.type==="file")return;vals[e.id]=e.type==="checkbox"||e.type==="radio"?["c",e.checked]:["v",e.value]});
+ const fid=typing?ae.id:null;let sel=null;try{if(typing&&ae.selectionStart!=null)sel=[ae.selectionStart,ae.selectionEnd]}catch(e){}const y=scrollY;
+ render(1);Object.keys(vals).forEach(id=>{const e=document.getElementById(id);if(!e)return;const [k,v]=vals[id];if(k==="c")e.checked=v;else if(e.value!==v)e.value=v});
+ if(fid){const e=document.getElementById(fid);if(e){try{e.focus({preventScroll:true});if(sel)e.setSelectionRange(sel[0],sel[1])}catch(x){}}}scrollTo(0,y)}
+
+/* ---- start ---- */
+function cloudBoot(){if(!cloudOn())return;document.documentElement.classList.add("cloud");sesLoad();
+ if(S.cloud!==CLOUD.ref){["users","stores","products","orders","chats","reviews","qa","coupons","banners","po","sh","log","acc","out"].forEach(k=>S[k]=[]);S.cats=[];S.pts={};S.cu={};S.used={};S.prof={};S.meId=null;S.cloud=CLOUD.ref}
+ S.meId=CL.ses&&CL.ses.uid?CL.ses.uid:null;if(!S.out)S.out=[];CL.boot=1;pull();
+ setInterval(()=>{if(document.hidden)return;const now=Date.now(),iv=/^#\/(chat|seller\/chat|admin\/support)/.test(location.hash)?2500:CL.ses?6000:20000;if(now-CL.last>=iv&&!CL.busy){CL.last=now;pull()}if(Object.keys(CL.up).length&&!CL.upb)uploadAll()},1000);
+ document.addEventListener("visibilitychange",()=>{if(!document.hidden)CL.last=0});addEventListener("online",()=>{CL.last=0;schedPush()})}
+const cloudLoading=()=>cloudOn()&&!CL.ready;
+function extTests8(ok,t){ok("Абр: рақами фармоиш ва ID-ҳо такрор намешаванд",NID()!==NID()&&/^SN\d+$/.test("SN1")&&typeof pmail==="function"&&pmail("93 555 44 33")==="t992935554433@tajstore.app");
+ const p={id:5,sid:2,vs:[{id:"v1",st:3,pr:9}],pop:1,n:"A"},q=cp_(p);q.vs[0].st=1;q.pop=4;ok("Абр: харидор танҳо миқдорро иваз карда метавонад",coreP(p)===coreP(q)&&(q.n="B",coreP(p)!==coreP(q)));
+ ok("Абр: акси сервер қабул мешавад",isCloudImg(CLOUD.url+"/storage/v1/object/public/img/1/a.webp")&&!isCloudImg("https://evil.example/x.webp"))}
 
 S=load();if(!S.th2){S.theme=S.theme==="dark"?"dark":"ivory";S.th2=1}S.cur="TJS";S.stores.forEach(s=>{if(!Array.isArray(s.cards))s.cards=[]});applyTheme();buildHeader();splash();
 document.addEventListener("click",e=>{const el=e.target.closest("[data-a]");if(!el)return;const f=A[el.dataset.a];if(f){e.preventDefault();Promise.resolve().then(()=>f(el.dataset,el)).catch(x=>{console.error(x);toast(T("e_gen"))})}});
@@ -1063,5 +1230,5 @@ addEventListener("hashchange",e=>{const old="#"+(String(e.oldURL||"").split("#")
 addEventListener("storage",e=>{if(e.key===KEY&&e.newValue){try{const s=mig(JSON.parse(e.newValue));if(s){S=s;render(1)}}catch(x){}}});
 let _rs=0;setInterval(()=>{$$("[data-end]").forEach(e=>{const r=+e.dataset.end-Date.now();if(r<=0){if(!_rs){_rs=1;render(1);setTimeout(()=>_rs=0,1500)}return}const s=Math.floor(r/1e3);e.textContent=[Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":")})},1000);
 setInterval(()=>{const b=$("#bn");if(!b||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))return;const sl=$$(".slide",b),dt2=$$("#dts i");if(sl.length<2)return;let i=sl.findIndex(x=>x.classList.contains("on"));sl[i].classList.remove("on");if(dt2[i])dt2[i].classList.remove("on");i=(i+1)%sl.length;sl[i].classList.add("on");if(dt2[i])dt2[i].classList.add("on")},5000);
-bootImgs().finally(()=>{let ch=0;S.chats.forEach(c=>{const n=c.msgs.length;c.msgs=c.msgs.filter(m=>!m.bot);if(c.msgs.length!==n)ch=1});S.products.forEach(p=>{if(p.flash&&p.flash.daily){delete p.flash;ch=1}});if(ch)save();render()});
+bootImgs().finally(()=>{cloudBoot();let ch=0;S.chats.forEach(c=>{const n=c.msgs.length;c.msgs=c.msgs.filter(m=>!m.bot);if(c.msgs.length!==n)ch=1});S.products.forEach(p=>{if(p.flash&&p.flash.daily){delete p.flash;ch=1}});if(ch)save();render()});
 </script></body></html>

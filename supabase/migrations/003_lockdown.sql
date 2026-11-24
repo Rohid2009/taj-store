@@ -1,0 +1,1 @@
+revoke execute on function public.g_profiles(), public.g_stores(), public.g_products(), public.g_cats(), public.g_orders(), public.g_reviews(), public.g_qa(), public.g_chats(), public.touch() from public, anon, authenticated;
