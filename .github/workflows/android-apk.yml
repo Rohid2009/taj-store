@@ -30,9 +30,13 @@ jobs:
           cp assets/icon-only.png assets/splash.png app/assets/
           cd app
           npm init -y >/dev/null
-          npm install @capacitor/core@6.1.2 @capacitor/cli@6.1.2 @capacitor/android@6.1.2
+          npm install @capacitor/core@6.1.2 @capacitor/cli@6.1.2 @capacitor/android@6.1.2 @capacitor-community/speech-recognition@6.0.1
           npx cap init "TAJ STORE" tj.tajstore.app --web-dir www
           npx cap add android
+          # microphone + speech recognizer access for voice search
+          M=android/app/src/main/AndroidManifest.xml
+          grep -q RECORD_AUDIO $M || sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n    <queries><intent><action android:name="android.speech.RecognitionService" /></intent></queries>#' $M
+          grep -n "RECORD_AUDIO\|RecognitionService" $M
           npx @capacitor/assets@3.0.5 generate --android --iconBackgroundColor "#0c0a10" --splashBackgroundColor "#0c0a10" || echo "icon step skipped"
           npx cap sync android
 
